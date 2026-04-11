@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.db.models import Q
 from .forms import SignUpForm, AddRecordForm
 from .models import Record
 
 def home(request):
-    records = Record.objects.all()
+    records = Record.objects.all().order_by("-id")
 
     # Check to see if logging in
     if request.method == "POST":
@@ -24,7 +25,21 @@ def home(request):
             return redirect("home")
     
     else:
-        return render(request, "home.html", {"records": records})
+        return render(request, "home.html", {"records": records}) 
+    
+def search_record(request):
+    records = Record.objects.all().order_by("-id")
+    query = request.GET.get("q", "").strip()
+
+    if query:
+        records = records.filter(
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query) |
+            Q(email__icontains=query) |
+            Q(phone__icontains=query)
+        )
+
+    return render(request, "home.html", {"records": records, "query": query})
 
 
 def logout_user(request):
@@ -102,6 +117,4 @@ def update_record(request, pk):
     else:
         messages.success(request, "You must be logged in to create")
         return redirect("home")
-
-
             
