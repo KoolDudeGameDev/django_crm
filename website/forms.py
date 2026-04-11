@@ -111,6 +111,9 @@ class AddRecordForm(forms.ModelForm):
     class Meta:
         model = Record
         exclude = ("user",)
+        widgets = {
+            "status": forms.Select(attrs={"class": "form-control"}),
+        }
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip()

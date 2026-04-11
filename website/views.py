@@ -6,7 +6,7 @@ from .forms import SignUpForm, AddRecordForm
 from .models import Record
 
 def home(request):
-    records = Record.objects.all().order_by("-id")
+    records = Record.objects.all().order_by("id")
 
     # Check to see if logging in
     if request.method == "POST":
@@ -28,8 +28,9 @@ def home(request):
         return render(request, "home.html", {"records": records}) 
     
 def search_record(request):
-    records = Record.objects.all().order_by("-id")
+    records = Record.objects.all().order_by("id")
     query = request.GET.get("q", "").strip()
+    status = request.GET.get("status", "")
 
     if query:
         records = records.filter(
@@ -39,7 +40,16 @@ def search_record(request):
             Q(phone__icontains=query)
         )
 
-    return render(request, "home.html", {"records": records, "query": query})
+    if status:
+        records = records.filter(status=status)
+
+    context = {
+        "records": records,
+        "query": query,
+        "selected_status": status,
+        "status_choices": Record.STATUS_CHOICES,
+    }
+    return render(request, "home.html", context)
 
 
 def logout_user(request):
