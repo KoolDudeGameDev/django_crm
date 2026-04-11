@@ -111,3 +111,27 @@ class AddRecordForm(forms.ModelForm):
     class Meta:
         model = Record
         exclude = ("user",)
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip()
+        qs = Record.objects.filter(email__iexact=email)
+
+        if self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+
+        if qs.exists():
+            raise forms.ValidationError("This email already exists!")
+        
+        return email
+    
+    def clean_phone(self):
+        phone = self.cleaned_data["phone"].strip()
+        qs = Record.objects.filter(phone=phone)
+
+        if self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+
+        if qs.exists():
+            raise forms.ValidationError("This phone number already exists!")
+        
+        return phone

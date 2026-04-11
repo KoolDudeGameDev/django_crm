@@ -1,25 +1,72 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
 <div class="col-md-6 offset-md-3">
 
     <h1>Add Record</h1> <br>
 
     <form method="POST" action="{% url 'add_record' %}">
         {% csrf_token %}
-        {{ form.as_p}}
+        
+        <div class="form-group">
+            <label for="id_first_name"></label>
+            {{ form.first_name }}
+        </div>
 
-    <br>
+        <div class="form-group">
+            <label for="id_last_name"></label>
+            {{ form.last_name }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_email"></label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.email.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_phone"></label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.phone.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_address"></label>
+            {{ form.address }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_city"></label>
+            {{ form.city }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_state"></label>
+            {{ form.state }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_zipcode"></label>
+            {{ form.zipcode }}
+        </div>
+
+        <br>
         <button type="submit" class="btn btn-secondary">Add Record</button>
         <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
     </form>
 
-
-
 </div>
-
-
-
 
 {% endblock %}
