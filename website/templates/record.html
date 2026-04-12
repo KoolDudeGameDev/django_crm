@@ -17,10 +17,40 @@
             <strong>Zipcode: </strong>{{ customer_record.zipcode}} <br>
             <strong>Create At: </strong>{{ customer_record.created_at}} <br>
             <strong>ID: </strong>{{ customer_record.id }} <br>
-            <strong>Status: </strong>{{ customer_record.status }} <br>
+            <strong>Status: </strong>{{ customer_record.get_status_display }} <br>
     </p1>
   </div>
 </div>
+
+<!-- Notes Section -->
+<div class="card mt-3">
+  <div class="card-header">Notes</div>
+  <div class="card-body">
+    <ul>
+      {% for note in notes %}
+          <li>{{ note.note }} ({{ note.date }})
+              <!-- Separate form for deleting note -->
+              <form method="POST" style="display:inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="note_id" value="{{ note.id }}">
+                  <input type="hidden" name="delete_note" value="true">
+                  <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+          </li>
+      {% empty %}
+          <li>No notes available.</li>
+      {% endfor %}
+    </ul>
+    
+    <!-- Form to Add a New Note -->
+    <form method="POST">
+      {% csrf_token %}
+      {{ note_form.as_p }}
+      <button type="submit" class="btn btn-primary">Add Note</button>
+    </form>
+  </div>
+</div>
+
 
 <br><br>
 <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>

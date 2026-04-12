@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Record
+from .models import Record, Notes
 
 
 class SignUpForm(UserCreationForm):
@@ -138,3 +138,12 @@ class AddRecordForm(forms.ModelForm):
             raise forms.ValidationError("This phone number already exists!")
         
         return phone
+    
+
+class NoteForm(forms.ModelForm):
+    class Meta:
+        model = Notes
+        fields = ['note'] 
+        widgets = {
+            'note': forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+        }

@@ -23,3 +23,8 @@ class Record(models.Model):
     def __str__(self):
         return (f"{self.first_name} {self.last_name}")
 
+
+class Notes(models.Model):
+    note = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    record = models.ForeignKey(Record, on_delete=models.CASCADE, related_name='notes')
