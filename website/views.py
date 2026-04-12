@@ -7,28 +7,6 @@ from .models import Record
 
 def home(request):
     records = Record.objects.all().order_by("id")
-
-    # Check to see if logging in
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-
-        # Authenticate the user
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            messages.success(request, "You have successfully logged in.")
-            return redirect("home")
-        else:
-            messages.success(request, "There was an error logging in. Please try again.")
-            return redirect("home")
-    
-    else:
-        return render(request, "home.html", {"records": records}) 
-    
-def search_record(request):
-    records = Record.objects.all().order_by("id")
     query = request.GET.get("q", "").strip()
     status = request.GET.get("status", "")
 
@@ -49,7 +27,25 @@ def search_record(request):
         "selected_status": status,
         "status_choices": Record.STATUS_CHOICES,
     }
-    return render(request, "home.html", context)
+
+    # Check to see if logging in
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+
+        # Authenticate the user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, "You have successfully logged in.")
+            return redirect("home")
+        else:
+            messages.success(request, "Invalid credentials. Please try again.")
+            return redirect("home")
+    
+    else:
+        return render(request, "home.html", context) 
 
 
 def logout_user(request):

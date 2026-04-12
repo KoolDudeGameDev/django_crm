@@ -4,7 +4,7 @@
 
 {% if user.is_authenticated %}
     <!-- Search Form -->
-    <form method="GET" action="{% url 'search_record' %}" class="mb-3 d-flex align-items-center">
+    <form method="GET" action="{% url 'home' %}" class="mb-3 d-flex align-items-center">
         <input 
             type="text" 
             name="q" 
@@ -13,7 +13,7 @@
             value="{{ query }}">
 
         <select name="status" class="form-control ms-2">
-            <option value="">All Statuses</option>
+            <option value="">Filter Status</option>
             {% for value, label in status_choices %}
                 <option value="{{ value }}" 
                 {% if selected_status == value %}selected{% endif %}>
@@ -21,9 +21,10 @@
                 </option>
             {% endfor %}
         </select>
+        
         <button type="submit" class="btn btn-primary ms-2">Search</button>
         {% if query %}
-            <a href="{% url 'search_record' %}?=" class="btn btn-secondary ms-2">Clear</a>
+            <a href="{% url 'home' %}?=" class="btn btn-secondary ms-2">Clear</a>
         {% endif %}
     </form>
 
